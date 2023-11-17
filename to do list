@@ -1,0 +1,104 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Task {
+    private String description;
+    private boolean completed;
+
+    public Task(String description) {
+        this.description = description;
+        this.completed = false;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void markAsCompleted() {
+        completed = true;
+    }
+
+    @Override
+    public String toString() {
+        return (completed ? "[X] " : "[ ] ") + description;
+    }
+}
+
+public class ToDoList {
+    private ArrayList<Task> tasks;
+    private Scanner scanner;
+
+    public ToDoList() {
+        tasks = new ArrayList<>();
+        scanner = new Scanner(System.in);
+    }
+
+    public void addTask(String description) {
+        Task task = new Task(description);
+        tasks.add(task);
+        System.out.println("Задача добавлена: " + task.getDescription());
+    }
+
+    public void markTaskAsCompleted(int index) {
+        if (index >= 0 && index < tasks.size()) {
+            Task task = tasks.get(index);
+            task.markAsCompleted();
+            System.out.println("Задача выполнена: " + task.getDescription());
+        } else {
+            System.out.println("Некорректный индекс задачи.");
+        }
+    }
+
+    public void displayTasks() {
+        if (tasks.isEmpty()) {
+            System.out.println("Список задач пуст.");
+        } else {
+            System.out.println("Список задач:");
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println((i + 1) + ". " + tasks.get(i));
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        ToDoList toDoList = new ToDoList();
+        Scanner scanner = new Scanner(System.in);
+
+        int choice;
+        do {
+            System.out.println("\n1. Добавить задачу");
+            System.out.println("2. Отметить задачу как выполненную");
+            System.out.println("3. Показать список задач");
+            System.out.println("0. Выйти");
+
+            System.out.print("Выберите действие: ");
+            choice = scanner.nextInt();
+            scanner.nextLine();  // consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Введите описание задачи: ");
+                    String description = scanner.nextLine();
+                    toDoList.addTask(description);
+                    break;
+                case 2:
+                    System.out.print("Введите индекс выполненной задачи: ");
+                    int index = scanner.nextInt();
+                    toDoList.markTaskAsCompleted(index - 1);
+                    break;
+                case 3:
+                    toDoList.displayTasks();
+                    break;
+                case 0:
+                    System.out.println("Выход из программы.");
+                    break;
+                default:
+                    System.out.println("Некорректный выбор. Повторите попытку.");
+            }
+        } while (choice != 0);
+    }
+}
